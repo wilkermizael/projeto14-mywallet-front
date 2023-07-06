@@ -22,7 +22,7 @@ export default function SignUpPage() {
         
         axios.post("http://localhost:5000/cadastro", dadosCadastro)
         .then(() => console.log('deu tudo certo')) // pegar o numero do token
-        .catch(() => console.log("Algo deu errado"))
+        .catch((error) => alert(error.response.data))
 
       }else{
         alert('As senhas nao sao iguais') 
@@ -38,7 +38,7 @@ export default function SignUpPage() {
         <input placeholder="Nome" type="text" value={nome} onChange={e =>setNome( e.target.value)}/>
         <input placeholder="E-mail" type="email" value={email} onChange={e => setEmail(e.target.value)}/>
         <input placeholder="Senha" type="password" autocomplete="new-password" value={senha} onChange={e => setSenha(e.target.value)}/>
-        <input placeholder="Confirme a senha" required type="password" autocomplete="new-password" value={confirmSenha} onChange={e => setConfirmSenha(e.target.value)}/>
+        <input placeholder="Confirme a senha" type="password" autocomplete="new-password" value={confirmSenha} onChange={e => setConfirmSenha(e.target.value)}/>
         
         <button>Cadastrar</button>
         
