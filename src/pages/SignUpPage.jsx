@@ -21,7 +21,7 @@ export default function SignUpPage() {
       }
       if(senha === confirmSenha){
         
-        axios.post("http://localhost:5000/cadastro", dadosCadastro)
+        axios.post("http://localhost:5000/sign-up", dadosCadastro)
         .then(() => navigate('/')) 
         .catch((error) => alert(error.response.data))
 
