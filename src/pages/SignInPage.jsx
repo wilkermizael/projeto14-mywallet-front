@@ -3,15 +3,18 @@ import { Link, useNavigate } from "react-router-dom"
 import MyWalletLogo from "../components/MyWalletLogo"
 import { useState } from "react"
 import axios from "axios"
-import { TokenContext } from "../Contex/TokenContext"
 import { useContext } from "react"
+import { UserContext } from "../Contex/UserContext"
+//import { TokenContext } from "../Contex/TokenContext"
+//import { useContext } from "react"
 
 export default function SignInPage() {
   
   const [emailLogin, setEmailLogin] = useState('')
   const [senhaLogin, setSenhaLogin] = useState('')
-  const {token,setToken} = useContext(TokenContext)
+  //const {token,setToken} = useContext(TokenContext)
   const navigate = useNavigate()
+ const {setUser} = useContext(UserContext)
  function login(event){
     event.preventDefault()
     const dadosLogin ={
@@ -19,13 +22,17 @@ export default function SignInPage() {
       senha:senhaLogin
     }
       
-      axios.post("http://localhost:5000/sign-in", dadosLogin)
-      .then((resposta) => {
-        setToken(resposta.data.token)
-        setUsuario(resposta.data.nome)
-        //navigate('/home')
+      axios.post("http://localhost:5000/", dadosLogin)
+      .then(resposta => {
+        const {_id,nome, email, token} = resposta.data
+        setUser({nome,token})
+        localStorage.setItem('user', JSON.stringify({nome, token}))
+      
+        navigate('/home')
       }) 
-      .catch((error) => alert(error.response.data))
+      .catch((error) => {
+        alert(error.message)
+      })
     
    
 
