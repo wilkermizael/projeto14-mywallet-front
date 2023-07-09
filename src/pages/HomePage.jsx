@@ -3,9 +3,71 @@ import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import { useContext } from "react"
 import { UserContext } from "../Contex/UserContext"
-
+import { Link} from "react-router-dom"
+import { useEffect } from "react"
+import axios from "axios"
+import { useState } from "react"
 export default function HomePage() {
 const {user} = useContext(UserContext)
+const [caixa, setCaixa] = useState()
+const [total, setTotal] = useState()
+let somaTotal ={}
+let fluxoCaixa=[]
+
+  useEffect(()=>{
+   
+    axios.get("http://localhost:5000/home")
+    .then(res =>{
+      fluxoCaixa =res.data
+      console.log(fluxoCaixa)
+      
+      const entrada = fluxoCaixa.map(item => item.fluxo ==="entrada"? Number(item.valor) : 0)
+      const initialValue = 0;
+      let sumWithInitial = entrada.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,initialValue );
+      console.log(sumWithInitial)
+    
+    
+      const saida = fluxoCaixa.map(item => item.fluxo === 'saida'? Number(item.valor):0)
+      const valorInicial =0
+      let somaSaida = saida.reduce((acumulador, valorAtual) => acumulador + valorAtual, valorInicial);
+      console.log(somaSaida)
+    
+      somaTotal=(Number(sumWithInitial) - Number(somaSaida))
+
+      console.log(somaTotal)
+      setCaixa([...fluxoCaixa, somaTotal])
+      console.log(caixa[caixa.length -1] )
+    })
+    .catch(error =>{
+      console.log(error)
+    })
+    console.log(caixa)
+  
+ 
+  },[])
+
+  /*if(caixa){
+    const entrada = caixa.map(item => item.fluxo ==="entrada"? Number(item.valor) : 0)
+    const initialValue = 0;
+    const sumWithInitial = entrada.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,initialValue );
+    console.log(sumWithInitial)
+  
+  
+    const saida = caixa.map(item => item.fluxo === 'saida'? Number(item.valor):0)
+    const valorInicial =0
+    const somaSaida = saida.reduce((acumulador, valorAtual) => acumulador + valorAtual, valorInicial);
+    console.log(somaSaida)
+  
+    somaTotal=(Number(sumWithInitial) - Number(somaSaida))
+    console.log(somaTotal)
+    
+    }*/
+  
+
+if(caixa){
+  
   return (
     <HomeContainer>
       <Header>
@@ -15,43 +77,51 @@ const {user} = useContext(UserContext)
 
       <TransactionsContainer>
         <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong>Almoço mãe</strong>
-            </div>
-            <Value color={"negativo"}>120,00</Value>
+          
+            {caixa.map(item => (
+              <ListItemContainer key={item._id}>
+            
+                <div>
+                  <span>{item.data}</span>
+                  <strong>{item.descricao}</strong>
+                </div>
+              <Value color={item.fluxo === "entrada"? "entrada" : "saida"}>{item.valor}</Value>
           </ListItemContainer>
-
-          <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
+            ))}
+            
+        
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"}>2880,00</Value>
+          <Value color={caixa[caixa.length -1] > 0 ? "entrada" : "saida"}>{caixa[caixa.length -1]}</Value>
         </article>
       </TransactionsContainer>
 
 
       <ButtonsContainer>
-        <button>
-          <AiOutlinePlusCircle />
-          <p>Nova <br /> entrada</p>
-        </button>
-        <button>
-          <AiOutlineMinusCircle />
-          <p>Nova <br />saída</p>
-        </button>
+        
+            <button>
+              <Link to={`/nova-transacao/entrada`}>
+                <AiOutlinePlusCircle />
+                <p>Nova <br /> entrada</p>
+              </Link>
+            </button>
+        
+       
+        
+          <button>
+            <Link to={'/nova-transacao/saida'}>
+              <AiOutlineMinusCircle />
+              <p>Nova <br />saída</p>
+            </Link>
+          </button>
+        
       </ButtonsContainer>
 
     </HomeContainer>
   )
+}
 }
 
 const HomeContainer = styled.div`
@@ -108,7 +178,7 @@ const ButtonsContainer = styled.section`
 const Value = styled.div`
   font-size: 16px;
   text-align: right;
-  color: ${(props) => (props.color === "positivo" ? "green" : "red")};
+  color: ${(props) => (props.color === "entrada" ? "#00ff1a" : "#ff0000")};
 `
 const ListItemContainer = styled.li`
   display: flex;

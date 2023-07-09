@@ -12,7 +12,6 @@ export default function SignInPage() {
   
   const [emailLogin, setEmailLogin] = useState('')
   const [senhaLogin, setSenhaLogin] = useState('')
-  //const {token,setToken} = useContext(TokenContext)
   const navigate = useNavigate()
  const {setUser} = useContext(UserContext)
  function login(event){
@@ -24,14 +23,18 @@ export default function SignInPage() {
       
       axios.post("http://localhost:5000/", dadosLogin)
       .then(resposta => {
-        const {_id,nome, email, token} = resposta.data
+        const {nome, token} = resposta.data
         setUser({nome,token})
         localStorage.setItem('user', JSON.stringify({nome, token}))
-      
         navigate('/home')
       }) 
       .catch((error) => {
-        alert(error.message)
+        if(!token){
+          navigate('/')
+        }else{
+          alert(error.message)
+        }
+        
       })
     
    

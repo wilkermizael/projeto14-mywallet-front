@@ -26,6 +26,7 @@ export default function SignUpPage() {
         .catch((error) => alert(error.response.data))
 
       }else{
+        navigate('/')
         alert('As senhas nao sao iguais') 
       }
   }
