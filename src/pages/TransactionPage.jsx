@@ -3,9 +3,11 @@ import { useContext, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 import { TokenContext } from "../Contex/TokenContext"
+import { UserContext } from "../Contex/UserContext"
 
 export default function TransactionsPage() {
   const {token} = useContext(TokenContext)
+  const {user} = useContext(UserContext)
   const params = useParams()
   const tipo= params.tipo.toString()
   const [valor,setValor]= useState('')
@@ -19,7 +21,8 @@ export default function TransactionsPage() {
     const transaction ={
       valor:valor,
       descricao:descricao,
-      fluxo: fluxo
+      fluxo: fluxo,
+      userId: (user._id)
     }
   
    const config = {

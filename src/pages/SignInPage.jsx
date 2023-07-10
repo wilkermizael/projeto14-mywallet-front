@@ -5,15 +5,16 @@ import { useState } from "react"
 import axios from "axios"
 import { useContext } from "react"
 import { UserContext } from "../Contex/UserContext"
-//import { TokenContext } from "../Contex/TokenContext"
-//import { useContext } from "react"
+import { TokenContext } from "../Contex/TokenContext"
+
 
 export default function SignInPage() {
   
   const [emailLogin, setEmailLogin] = useState('')
   const [senhaLogin, setSenhaLogin] = useState('')
   const navigate = useNavigate()
- const {setUser} = useContext(UserContext)
+  const {setUser} = useContext(UserContext)
+  const {token} = useContext(TokenContext)
  function login(event){
     event.preventDefault()
     const dadosLogin ={
@@ -23,16 +24,18 @@ export default function SignInPage() {
       
       axios.post("http://localhost:5000/", dadosLogin)
       .then(resposta => {
-        const {nome, token} = resposta.data
-        setUser({nome,token})
-        localStorage.setItem('user', JSON.stringify({nome, token}))
+        
+        const {nome, token, _id} = resposta.data
+        setUser({nome,token, _id})
+        localStorage.setItem('user', JSON.stringify({nome, token,_id}))
         navigate('/home')
       }) 
       .catch((error) => {
         if(!token){
+          alert(error.response.data)
           navigate('/')
         }else{
-          alert(error.message)
+          alert(error.response.data)
         }
         
       })

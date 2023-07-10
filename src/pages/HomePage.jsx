@@ -1,70 +1,69 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
+import { Link } from "react-router-dom"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import { useContext } from "react"
 import { UserContext } from "../Contex/UserContext"
-import { Link} from "react-router-dom"
 import { useEffect } from "react"
 import axios from "axios"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { TokenContext } from "../Contex/TokenContext"
+
 export default function HomePage() {
 const {user} = useContext(UserContext)
+const {token} = useContext(TokenContext)
 const [caixa, setCaixa] = useState()
-const [total, setTotal] = useState()
 let somaTotal ={}
 let fluxoCaixa=[]
+const navigate = useNavigate()
+
+function Logout(){
+  localStorage.removeItem('user')
+  axios.post("http://localhost:5000/logout")
+  .then(() => {
+    navigate('/')
+  })
+  .catch((error) => console.log(error))
+}
+
+
+const config = {
+  headers: {
+    "Authorization": `Bearer ${token}`,
+    "UserHeaders":JSON.stringify(user)
+  }
+}
+
 
   useEffect(()=>{
-   
-    axios.get("http://localhost:5000/home")
+  
+    axios.get("http://localhost:5000/home",config)
     .then(res =>{
       fluxoCaixa =res.data
-      console.log(fluxoCaixa)
       
       const entrada = fluxoCaixa.map(item => item.fluxo ==="entrada"? Number(item.valor) : 0)
       const initialValue = 0;
+      //SOMA TODOS OS VALORES POSITIVOS OU SEJA, VALORES DE ENTRADA
       let sumWithInitial = entrada.reduce(
       (accumulator, currentValue) => accumulator + currentValue,initialValue );
-      console.log(sumWithInitial)
+  
     
-    
+      //SOMA TODOS OS VALORES NEGATIVOS OU SEJA, VALORES DE SAÍDA
       const saida = fluxoCaixa.map(item => item.fluxo === 'saida'? Number(item.valor):0)
       const valorInicial =0
       let somaSaida = saida.reduce((acumulador, valorAtual) => acumulador + valorAtual, valorInicial);
-      console.log(somaSaida)
     
       somaTotal=(Number(sumWithInitial) - Number(somaSaida))
-
-      console.log(somaTotal)
       setCaixa([...fluxoCaixa, somaTotal])
-      console.log(caixa[caixa.length -1] )
+   
     })
     .catch(error =>{
       console.log(error)
     })
-    console.log(caixa)
-  
- 
+
   },[])
 
-  /*if(caixa){
-    const entrada = caixa.map(item => item.fluxo ==="entrada"? Number(item.valor) : 0)
-    const initialValue = 0;
-    const sumWithInitial = entrada.reduce(
-    (accumulator, currentValue) => accumulator + currentValue,initialValue );
-    console.log(sumWithInitial)
-  
-  
-    const saida = caixa.map(item => item.fluxo === 'saida'? Number(item.valor):0)
-    const valorInicial =0
-    const somaSaida = saida.reduce((acumulador, valorAtual) => acumulador + valorAtual, valorInicial);
-    console.log(somaSaida)
-  
-    somaTotal=(Number(sumWithInitial) - Number(somaSaida))
-    console.log(somaTotal)
-    
-    }*/
-  
 
 if(caixa){
   
@@ -72,12 +71,12 @@ if(caixa){
     <HomeContainer>
       <Header>
         <h1> Olá {user.nome}</h1>
-        <BiExit />
+        <BiExit  onClick={Logout}/>
+        
       </Header>
 
       <TransactionsContainer>
         <ul>
-          
             {caixa.map(item => (
               <ListItemContainer key={item._id}>
             
@@ -85,8 +84,8 @@ if(caixa){
                   <span>{item.data}</span>
                   <strong>{item.descricao}</strong>
                 </div>
-              <Value color={item.fluxo === "entrada"? "entrada" : "saida"}>{item.valor}</Value>
-          </ListItemContainer>
+                <Value color={item.fluxo === "entrada"? "entrada" : "saida"}>{item.valor}</Value>
+              </ListItemContainer>
             ))}
             
         
@@ -147,8 +146,14 @@ const TransactionsContainer = styled.article`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: scroll;
   article {
+    width: 88%;
     display: flex;
+    position: absolute;
+    bottom: 160px;
+ 
+    
     justify-content: space-between;   
     strong {
       font-weight: 700;
@@ -178,7 +183,7 @@ const ButtonsContainer = styled.section`
 const Value = styled.div`
   font-size: 16px;
   text-align: right;
-  color: ${(props) => (props.color === "entrada" ? "#00ff1a" : "#ff0000")};
+  color: ${(props) => (props.color === "entrada" ? "#00ff1a" : "red")};
 `
 const ListItemContainer = styled.li`
   display: flex;
