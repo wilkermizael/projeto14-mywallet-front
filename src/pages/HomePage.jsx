@@ -97,7 +97,7 @@ if(caixa){
         <article>
           <strong>Saldo</strong>
           <div data-test="total-amount">
-          <Value color={caixa[caixa.length -1] > 0 ? "entrada" : "saida"}>{caixa[caixa.length -1]}</Value>
+          <Value color={caixa[caixa.length -1] > 0 ? "entrada" : "saida"}>{Number(caixa[caixa.length -1]).toFixed(2)}</Value>
           </div>
         </article>
       </TransactionsContainer>
