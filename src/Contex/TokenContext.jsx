@@ -10,14 +10,19 @@ export default function TokenProvider({children}){
     //console.log(lsUser.token)
     const [token, setToken] = useState(lsUser!== null ? lsUser.token : {})
     const navigate = useNavigate()
-   // console.log(lsUser.token)
+   // console.log(lsUser)
     useEffect(()=>{
 
-        if(!lsUser){
+        if(lsUser){
+            navigate('/home')
+        }else{
+            navigate('/cadastro')
+        }
+        /*if(!lsUser){
             navigate('/')
         }else{
             navigate('/home')
-        }
+        }*/
     },[])
     return(
         
