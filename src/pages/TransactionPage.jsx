@@ -44,11 +44,11 @@ export default function TransactionsPage() {
 
   return (
     <TransactionsContainer>
-      <h1>Nova TRANSAÇÃO</h1>
+      <h1>Nova {fluxo}</h1>
       <form onSubmit={transacao}>
         <input placeholder="Valor"  type="text" value={valor} onChange={e => setValor(e.target.value)}/>
         <input placeholder="Descrição" type="text" value={descricao} onChange={e => setDescricao(e.target.value)}/>
-        <button>Salvar TRANSAÇÃO</button>
+        <button>Salvar {fluxo}</button>
       </form>
     </TransactionsContainer>
   )

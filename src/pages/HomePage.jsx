@@ -70,9 +70,10 @@ if(caixa){
   return (
     <HomeContainer>
       <Header>
-        <h1> Olá {user.nome}</h1>
+        <h1 data-test="user-name"> Olá {user.nome}</h1>
+        <div data-test="logout">
         <BiExit  onClick={Logout}/>
-        
+        </div>
       </Header>
 
       <TransactionsContainer>
@@ -82,9 +83,11 @@ if(caixa){
             
                 <div>
                   <span>{item.data}</span>
-                  <strong>{item.descricao}</strong>
+                  <strong data-test="registry-name">{item.descricao}</strong>
                 </div>
+                <div data-test="registry-amount">
                 <Value color={item.fluxo === "entrada"? "entrada" : "saida"}>{item.valor}</Value>
+                </div>
               </ListItemContainer>
             ))}
             
@@ -93,14 +96,16 @@ if(caixa){
 
         <article>
           <strong>Saldo</strong>
+          <div data-test="total-amount">
           <Value color={caixa[caixa.length -1] > 0 ? "entrada" : "saida"}>{caixa[caixa.length -1]}</Value>
+          </div>
         </article>
       </TransactionsContainer>
 
 
       <ButtonsContainer>
         
-            <button>
+            <button data-test="new-income">
               <Link to={`/nova-transacao/entrada`}>
                 <AiOutlinePlusCircle />
                 <p>Nova <br /> entrada</p>
@@ -109,7 +114,7 @@ if(caixa){
         
        
         
-          <button>
+          <button data-test="new-expense">
             <Link to={'/nova-transacao/saida'}>
               <AiOutlineMinusCircle />
               <p>Nova <br />saída</p>
