@@ -18,9 +18,9 @@ export default function TransactionsPage() {
   
   function transacao(event){
     event.preventDefault()
-    //const meuvalor = Number(valor).toFixed(2)
+   
     const transaction ={
-      valor:Number(valor),
+      valor:Number(valor).toFixed(2),
       descricao:descricao,
       fluxo: fluxo,
       userId: (user._id)
