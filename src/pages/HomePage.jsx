@@ -147,7 +147,8 @@ const TransactionsContainer = styled.article`
   background-color: #fff;
   color: #000;
   border-radius: 5px;
-  padding: 16px;
+  padding: 15px;
+  
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -157,12 +158,15 @@ const TransactionsContainer = styled.article`
     display: flex;
     position: absolute;
     bottom: 160px;
- 
     
     justify-content: space-between;   
     strong {
       font-weight: 700;
       text-transform: uppercase;
+    }
+    div{
+      position: relative;
+      right: -41px;
     }
   }
 `
@@ -201,4 +205,5 @@ const ListItemContainer = styled.li`
     color: #c6c6c6;
     margin-right: 10px;
   }
+  
 `
