@@ -26,7 +26,7 @@ export default function SignInPage() {
       .then(resposta => {
         
         const {nome, token, _id} = resposta.data
-        setUser({nome,token, _id})
+        //setUser({nome,token, _id})
         localStorage.setItem('user', JSON.stringify({nome, token,_id}))
         navigate('/home')
       }) 
