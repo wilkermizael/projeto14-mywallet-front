@@ -166,7 +166,7 @@ const TransactionsContainer = styled.article`
     }
     div{
       position: relative;
-      right: -41px;
+      right: -50px;
     }
   }
 `
