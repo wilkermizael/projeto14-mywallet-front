@@ -31,7 +31,7 @@ export default function TransactionsPage() {
     }
   }
   
-    axios.post(`http://localhost:5000/transacao`, transaction,config)
+    axios.post(`${import.meta.env.VITE_API_URL}/transacao`, transaction,config)
     .then(() =>{
       navigate('/home')
     })

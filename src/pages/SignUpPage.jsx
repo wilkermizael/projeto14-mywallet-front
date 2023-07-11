@@ -21,7 +21,7 @@ export default function SignUpPage() {
       }
       if(senha === confirmSenha){
         
-        axios.post("http://localhost:5000/cadastro", dadosCadastro)
+        axios.post(`${import.meta.env.VITE_API_URL}/cadastro`, dadosCadastro)
         .then(() => navigate('/')) 
         .catch((error) => alert(error.response.data))
 

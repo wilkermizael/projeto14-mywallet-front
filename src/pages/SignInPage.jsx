@@ -22,7 +22,7 @@ export default function SignInPage() {
       senha:senhaLogin
     }
       
-      axios.post("http://localhost:5000/", dadosLogin)
+      axios.post(`${import.meta.env.VITE_API_URL}/`, dadosLogin)
       .then(resposta => {
         
         const {nome, token, _id} = resposta.data

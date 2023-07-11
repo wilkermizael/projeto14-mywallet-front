@@ -20,7 +20,7 @@ const navigate = useNavigate()
 
 function Logout(){
   localStorage.removeItem('user')
-  axios.post("http://localhost:5000/logout")
+  axios.post(`${import.meta.env.VITE_API_URL}/logout`)
   .then(() => {
     navigate('/')
   })
@@ -38,7 +38,7 @@ const config = {
 
   useEffect(()=>{
   
-    axios.get("http://localhost:5000/home",config)
+    axios.get(`${import.meta.env.VITE_API_URL}/home`,config)
     .then(res =>{
       fluxoCaixa =res.data
       
